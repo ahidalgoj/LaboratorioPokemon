@@ -1,21 +1,23 @@
-import React, { useEffect } from 'react'
-import { Text, View } from 'react-native'
-import pokeAPI from '../api/pokeAPI'
+import React from 'react'
+import { ActivityIndicator, Text, View } from 'react-native'
+import { usePokemons } from '../hooks/usePokemons';
 
 export const FightScreen = () => {
 
-    useEffect(() => {
+  const {pokemonItems, isLoading} = usePokemons();
 
-        pokeAPI.get('/pokemon')
-            .then( resp => {
-                console.log(resp)
-            })
-    }, [])
-    
 
-    return (
-    <View>
-        <Text>Duelo entre Pokemones</Text>
-    </View>
+  if (isLoading) {
+    return(
+      <View>
+        <ActivityIndicator color='blue' size={50}/>
+      </View>
+    )
+  }
+
+  return (
+  <View>
+    <Text>Duelo de Pokemones</Text>
+  </View>
   )
 }
