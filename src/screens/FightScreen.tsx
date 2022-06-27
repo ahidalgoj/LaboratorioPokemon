@@ -1,13 +1,16 @@
 import React from 'react'
 import { useState } from 'react';
-import { StyleSheet, ActivityIndicator, Text, View } from 'react-native'
+import { StyleSheet, ActivityIndicator, Text, View, Button, Image } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
+import { PokemonPoster } from '../components/PokemonPoster';
 import { usePokemons } from '../hooks/usePokemons';
 import { ListItem } from '../interfaces/ListItem';
+import { PokemonInfo, Sprites } from '../interfaces/PokemonInfo';
+import { useGetPokemon } from '../hooks/useGetPokemon';
 
 export const FightScreen = () => {
 
-  //Estado para obtener los pokemones
+  //Hook para traer los primeros 40 pokemones
   const {pokemonItems, isLoading} = usePokemons();
 
   //*LISTA UNO*/
@@ -40,10 +43,11 @@ export const FightScreen = () => {
       </View>
     )
   }
-
+  
   return (
   <View>
     <Text style={styles.title}>Duelo de Pokemones</Text>
+    <View>
     <Dropdown
           style={[styles.dropdownUno, isListaUnoFocus && { borderColor: 'blue' }]}
           placeholderStyle={styles.placeholderStyle}
@@ -55,7 +59,7 @@ export const FightScreen = () => {
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={!isListaUnoFocus ? 'Seleccione un pókemon' : '...'}
+          placeholder={!isListaUnoFocus ? 'Seleccione' : '...'}
           searchPlaceholder="Buscar..."
           value={listaUnoValue}
           onFocus={() => setIsListaUnoFocus(true)}
@@ -76,7 +80,7 @@ export const FightScreen = () => {
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={!isListaDosFocus ? 'Seleccione un pókemon' : '...'}
+          placeholder={!isListaDosFocus ? 'Seleccione' : '...'}
           searchPlaceholder="Buscar..."
           value={listaDosValue}
           onFocus={() => setIsListaDosFocus(true)}
@@ -85,7 +89,24 @@ export const FightScreen = () => {
             setListaDosValue(item.value);
             setIsListaDosFocus(false);
           }}
-    />      
+    />     
+    </View>
+    <View style={styles.searchBtn}>
+      <Button 
+        title='Cargar Pokemones'
+        color='green'
+      />
+    </View>
+    <View>
+    <Image 
+        style={styles.pokemonPosterUno}
+        source={{uri:'https://www.freeiconspng.com/uploads/pokeball-transparent-png-2.png'}}
+      />   
+      <Image 
+        style={styles.pokemonPosterDos}
+        source={{uri:'https://www.freeiconspng.com/uploads/pokeball-transparent-png-2.png'}}
+      />      
+    </View>
   </View>
   )
 }
@@ -93,6 +114,8 @@ export const FightScreen = () => {
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
+    color: 'white',
+    backgroundColor:'blue'
   },  
   container: {
     backgroundColor: 'white',
@@ -102,7 +125,7 @@ const styles = StyleSheet.create({
     height: 50,
     width:150,
     padd:10,
-    top:30,
+    top:20,
     left:10,
     borderColor: 'gray',
     borderWidth: 0.5,
@@ -114,7 +137,7 @@ const styles = StyleSheet.create({
     height: 50,
     width:150,
     padd:10,
-    top:30,
+    top:20,
     right:10,
     borderColor: 'gray',
     borderWidth: 0.5,
@@ -148,4 +171,21 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
+  searchBtn: {
+    top: 100
+  },
+  pokemonPosterUno: {
+    width:100,
+    height:100,
+    left: 10,
+    top: 120,
+    position:'absolute'
+  },
+  pokemonPosterDos: {
+    width:100,
+    height:100,
+    right: 10,
+    top: 120,
+    position:'absolute'    
+  }
 });
